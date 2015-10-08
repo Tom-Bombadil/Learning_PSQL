@@ -1,3 +1,7 @@
+-- \list <- lists all databases
+
+
+
 CREATE TABLE flowlines03 
 (OBJECTID int, SOURCE char(20), FEATUREID int, 
 NextDownID int, Shape_Length real, LengthKM real);
@@ -356,7 +360,187 @@ CREATE TABLE products (
 -- ==================
 -- 5.4 System Columns
 -- ==================
+-- oid, tableoid, xmin, cmin, xmax, cmax, ctid
+-- Can't name other columns these names
 
-	
+-- OIDs are not necessarily unique within a table
 
+
+-- ====================
+-- 5.5 Modifying Tables
+-- ====================
+-- Designed to alter the definition, or structure, of the table
+
+
+-- 5.5.1 Adding a Column
+-- ---------------------
+	ALTER TABLE products ADD COLUMN description text;
+-- all options applied to a column in "CREATE TABLE" may be applied at this step
+-- default values must satisfy given constraints
+-- if no default is specified to the new column, a physical update is avoided. Therefore, if most new rows will be nondefault, best to not have a default.
+
+
+-- 5.5.2 Removing a Column
+-- -----------------------
+	ALTER TABLE products DROP COLUMN description;
+-- If the column is referenced elsewhere, the foreign key constraint will not get dropped unless "CASCADE" is added to the command
+
+
+-- 5.5.3 Adding a Constraint
+-- -------------------------
+	ALTER TABLE products ADD CHECK (name <> '');
+
+-- Add a not-null constraint
+	ALTER TABLE products ALTER COLUMN product_no SET NOT NULL;
 	
+-- The constraint is checked immediately
+
+
+-- 5.5.4 Removing a Constraint
+-- ---------------------------
+-- Must know the name of a constraint to remove it
+-- Use the psql commend: "\d tablename" to inspect the table details and find the constraint name.
+	ALTER TABLE products DROP CONSTRAINT some_name;
+-- If a default name is given (e.g. $2) then double quotes must be used to make it valid
+-- "CASCADE" added to drop a constraint that something else depends on
+
+-- To drop a not-null constraint:
+	ALTER TABLE products ALTER COLUMN product_no DROP NOT NULL;
+	
+	
+-- 5.5.5 Changing a Column's Default Value
+-- ---------------------------------------
+-- To change future default values:	
+	ALTER TABLE products ALTER COLUMN price SET DEFAULT 7.77;
+-- Doesn't alter existing default
+
+-- To remove any default (essentially changes deafult to NULL):
+	ALTER TABLE products ALTER COLUMN price DROP DEFAULT;
+	
+	
+-- 5.5.6 Changing a Column's Data Type
+-- -----------------------------------
+-- Convert data type:
+	ALTER TABLE products ALTER COLUMN price TYPE numeric(10,2);
+-- This only works if it can be converted using an implicit cast. Add "USING" for a more complex conversion
+-- It is best to drop constraints before changing type and then add back suitably modified versions.
+
+
+-- 5.5.7 Renaming a Column
+-- -----------------------
+ALTER TABLE products RENAME COLUMN product_no TO product_number;
+
+
+-- 5.5.8 Renaming a Table
+-- ----------------------
+ALTER TABLE products RENAME TO items;
+
+
+
+-- ===============
+-- 5.6  Privileges
+-- ===============
+GRANT -- used to assign privileges to a user
+PUBLIC -- as usernames, allows access to all users on the system
+REVOKE -- removes privileges
+
+
+-- ===========
+-- 5.7 Schemas
+-- ===========
+
+-- One or more schema in a database
+-- same object name used in different schemas without conflict
+-- schemas are not rigidly separated like databases
+-- analagous to directories at the operating system level, but cannot be nested
+
+-- Qualified names: names including the database.schema.table path (e.g. NHDHRDV2_06.data.daymet)
+-- Unqualified name: stand alone name (e.g. daymet)
+
+-- 5.7.1. Creating a Schema
+-- ------------------------
+
+CREATE SCHEMA myschema;
+
+-- Create or access objects in schema by separating with dot: schema.table ( e.g. data.daymet)
+
+-- Create a new table in new schema:
+CREATE TABLE myschema.mytable (
+ ...
+);
+
+-- Drop empty schema:
+DROP SCHEMA myschema;
+
+-- Drop schema with objects:
+DROP SCHEMA myschema CASCADE;
+
+-- Create schema for someone else
+CREATE SCHEMA schemaname AUTHORIZATION username;
+
+
+-- 5.7.2. The Public Schema
+-- ------------------------
+
+-- Not specifying a schema puts the table into the public schema. The statements below are equivalent:
+CREATE TABLE products ( ... );
+CREATE TABLE public.products ( ... );
+
+
+-- 5.7.3. The Schema Search Path
+-- -----------------------------
+
+-- Check current search path for tables:
+SHOW search_path;
+-- Lists schemas to be searched
+ search_path
+--------------
+ "$user",public
+ 
+
+-- To set search path (list schemas after "TO"):
+SET search_path TO myschema,public;
+SET search_path TO data,public;
+
+-- Now we don't have to specify "data.daymet", instead just "daymet" will work.
+
+
+-- If you need to write a qualified operator name in an expression, there is a special provision: you must write
+OPERATOR(schema.operator)
+
+
+-- 5.7.4. Schemas and Privileges
+-- -----------------------------
+-- Owner must grant privilege to users
+
+-- All users have privileges on the public schema. To revoke these privileges:
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;
+-- (The first "public" is the schema, the second "public" means "every user". 
+			-- In the first sense it is an identifier, in the second sense it is a key word, hence the different capitalization; 
+			-- recall the guidelines from Section 4.1.1.)
+
+-- 5.7.5. The System Catalog Schema
+-- --------------------------------
+pg_catalog -- This schema contains the system tables and all the built-in data types, functions, and operators
+
+-- If possible, avoid table names beginning with "pg_"
+
+
+-- 5.7.6. Usage Patters
+-- --------------------
+-- No schemas
+-- 1 schema per user
+-- Different schemas for shared applications (tables, functions, etc.)
+
+
+-- 5.7.7. Portability
+-- ------------------
+
+
+
+
+
+
+
+
+

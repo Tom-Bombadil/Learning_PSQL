@@ -1,0 +1,17 @@
+-- Start bash Script
+
+cd "/home/kyle/practice/databases/"
+
+createdb daymet06
+
+psql daymet06
+
+-- End bash script
+-- ===========================================
+
+
+
+cd "/home/kyle/daymet/"
+
+
+sqlite -header -csv -separator ',' 'select * from NHDHRDV@_06;' > mytable.csv

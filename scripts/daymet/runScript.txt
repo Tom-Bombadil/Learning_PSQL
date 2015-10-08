@@ -1,0 +1,4 @@
+cd "/home/kyle/daymet"
+createdb NHDHRDV2_daymet_06  # Update the database name on this line
+./import_daymet.sh NHDHRDV2_daymet_06 # Update the database name on this line too
+
