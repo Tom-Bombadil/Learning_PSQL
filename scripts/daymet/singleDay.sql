@@ -1,14 +1,45 @@
-psql daymet06
-
-
-
+psql NHDHRDV2_daymet_06
 
 
 -- Select variables for all FEATUREIDs from a single day
-SELECT FEATUREID, tmax, prcp, swe INTO singleDay FROM data.daymet WHERE date = '2014-01-01';	
+SELECT * INTO sampleDays FROM data.daymet 
+	WHERE date = '2012-04-15' OR 
+		  date = '1985-11-03' OR 
+		  date = '1997-07-22' OR 
+		  date = '2004-02-29';	
+	
+-- Export the record as a CSV
+\copy sampleDays TO '/home/kyle/daymet/sampleDays.csv' DELIMITER ',' CSV HEADER;
+
+	
+	
+SELECT * INTO singleDay FROM data.daymet WHERE date = '2012-04-15';		
+	
+SELECT * FROM daymet WHERE date = '2012-04-15';			
 	
 -- Export the record as a CSV
 \copy singleDay TO '/home/kyle/daymet/singleDay.csv' DELIMITER ',' CSV HEADER;
+
+
+SELECT * FROM singleDay;
+
+
+-- ========================================================================================================================================
+
+-- Testing NA values in postrges
+-- =============================
+
+psql testNAvals;
+
+SELECT * INTO singleDay FROM data.daymet;	
+
+
+
+
+
+
+
+
 
 
 
