@@ -14,4 +14,4 @@ psql daymet06
 cd "/home/kyle/daymet/"
 
 
-sqlite -header -csv -separator ',' 'select * from NHDHRDV@_06;' > mytable.csv
+sqlite -header -csv -separator ',' 'select * from NHDHRDV2_06;' > mytable.csv
