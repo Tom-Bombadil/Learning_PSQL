@@ -1,5 +1,17 @@
+#!/bin/bash
+# Returns the locations that fall within the tidally influenced zones
+# location table columns [latitude, longitude]
+
+# usage: $ ./id_tidal_sites.sh <db name> <path to covariates folder>
+# example: $ ./append_covariates.sh conte_dev /conte/data/covariates/20150129
+
+
+
 # locations: data.locations_dummy
 # tidal zones: gis.tidal_zones
+
+
+
 
 
 # Setup table with temperature locations

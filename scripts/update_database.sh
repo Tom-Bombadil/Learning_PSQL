@@ -102,12 +102,13 @@ cd /home/kyle/scripts/db/gis/tidal_zones
 psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones(
                         uniqueid int,
                         lengthm real,
-						zonedistm int,
+                        zonedistm int,
                         geom geometry NOT NULL
                      );"
 
 # Upload spatial layer				 
-					 
+cd /home/kyle/scripts/db/gis/impoundment_zones					 
+./import_impoundment_zones.sh sheds_new /home/kyle/data/imp_zone
 					 
 
 
