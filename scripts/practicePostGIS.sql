@@ -26,7 +26,7 @@ shp2pgsql -I -s 5070:5070 /home/kyle/practice/postGIS/shapefiles/catsWB.shp catc
 -- General Tasks
 -- =============
 
-
+select * from pg_indexes where tablename = 'covariates';
 
 
 
@@ -42,7 +42,7 @@ select * from information_schema.table_constraints where table_name='covariates'
 
 -- Check columns in a table
 select column_name, data_type from information_schema.columns where table_name = 'catchments';
-
+select column_name, data_type from information_schema.columns where table_name = 'covariates';
 
 -- Workflow
 -- ========

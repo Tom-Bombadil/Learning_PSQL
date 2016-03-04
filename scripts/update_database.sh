@@ -61,6 +61,9 @@ psql -d sheds_new -c "CREATE TABLE gis.detailed_flowlines(
 cd /home/kyle/scripts/db/gis/detailed_flowlines
 ./import_detailed_flowlines.sh sheds_new /home/kyle/data/gis/detailed_flowlines					 
 
+# Create index on featureid
+psql -d sheds_new -c "CREATE INDEX detailed_flowlines_featureid_idx ON gis.detailed_flowlines USING btree (featureid);"
+
 
 # -------------------
 # Truncated flowlines
@@ -78,6 +81,9 @@ psql -d sheds_new -c "CREATE TABLE gis.truncated_flowlines(
 # Upload spatial layer
 cd /home/kyle/scripts/db/gis/truncated_flowlines
 ./import_truncated_flowlines.sh sheds_new /home/kyle/data/gis/truncated_flowlines
+
+# Create index on featureid
+psql -d sheds_new -c "CREATE INDEX truncated_flowlines_featureid_idx ON gis.truncated_flowlines USING btree (featureid);"
 
 
 # -----------
@@ -99,7 +105,7 @@ cd /home/kyle/scripts/db/gis/tidal_zones
 # Impounded Zones
 # ---------------
 # Create table
-psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones(
+psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones_100m(
                         uniqueid int,
                         lengthm real,
                         zonedistm int,
@@ -108,7 +114,34 @@ psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones(
 
 # Upload spatial layer				 
 cd /home/kyle/scripts/db/gis/impoundment_zones					 
-./import_impoundment_zones.sh sheds_new /home/kyle/data/imp_zone
+./import_impoundment_zones.sh sheds_new /home/kyle/data/gis/impoundment_zones
+
+
+
+
+# ----------------------
+# Impounded Zones Buffer
+# ----------------------
+# Create table
+psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones_100m_buf25m(
+                        uniqueid int,
+                        lengthm real,
+                        zonedistm int,
+						buff_dist int,
+                        geom geometry NOT NULL
+                     );"
+
+# Upload spatial layer				 
+cd /home/kyle/scripts/db/gis/impoundment_zones					 
+##./import_impoundment_zones.sh sheds_new /home/kyle/data/gis/impoundment_zones
+
+
+
+
+
+
+
+
 					 
 
 
