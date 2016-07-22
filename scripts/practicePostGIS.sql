@@ -31,18 +31,41 @@ select * from pg_indexes where tablename = 'covariates';
 
 
 
+SELECT a.attname, format_type(a.atttypid, a.atttypmod) AS data_type
+FROM   pg_index i
+JOIN   pg_attribute a ON a.attrelid = i.indrelid
+                     AND a.attnum = ANY(i.indkey)
+WHERE  i.indrelid = 'wbdhu12'::regclass
+AND    i.indisprimary;
+
+select * from (
+  SELECT huc12,
+  ROW_NUMBER() OVER(PARTITION BY huc12 ORDER BY huc12 asc) AS Row
+  FROM wbdhu12
+) dups
+where 
+dups.Row > 1;
+
+select fid, huc12 from wbdhu12 where huc12 = '040201010102';
 
 
-
-
+select * from pg_indexes where tablename = 'wbdhu12';
 
 -- Check constraints in a table
 select * from information_schema.table_constraints where table_name='catchments';
 select * from information_schema.table_constraints where table_name='covariates';
+select * from information_schema.table_constraints where table_name='catchment_huc12';
+select * from information_schema.table_constraints where table_name='wbdhu12';
+
 
 -- Check columns in a table
 select column_name, data_type from information_schema.columns where table_name = 'catchments';
 select column_name, data_type from information_schema.columns where table_name = 'covariates';
+select column_name, data_type from information_schema.columns where table_name = 'catchment_huc12';
+select column_name, data_type from information_schema.columns where table_name = 'temp.testhu12';
+select column_name, data_type from information_schema.columns where table_name = 'wbdhu12';
+
+select column_name, data_type from information_schema.columns where table_name = 'gis.impoundment_zones_100m';
 
 -- Workflow
 -- ========

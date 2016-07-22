@@ -119,41 +119,14 @@ cd /home/kyle/scripts/db/gis/impoundment_zones
 
 
 
-# ----------------------
-# Impounded Zones Buffer
-# ----------------------
-# Create table
-psql -d sheds_new -c "CREATE TABLE gis.impoundment_zones_100m_buf25m(
-                        uniqueid int,
-                        lengthm real,
-                        zonedistm int,
-						buff_dist int,
-                        geom geometry NOT NULL
-                     );"
-
-# Upload spatial layer				 
-cd /home/kyle/scripts/db/gis/impoundment_zones					 
-##./import_impoundment_zones.sh sheds_new /home/kyle/data/gis/impoundment_zones
-
-
-
-
-
-
-
-
-					 
-
-
-
 # =================
 # Delete Old Tables
 # =================
 
-# This table is replaced with the "truncated_flowlines"
+# This table is replaced with "gis.truncated_flowlines"
 psql -d sheds_new -c "DROP TABLE gis.flowlines"
 
-# This table is replaced with the "detailed_flowlines"
+# This table is replaced with the "gis.detailed_flowlines"
 psql -d sheds_new -c "DROP TABLE gis.hrd_flowlines"
 
 # The featureid is now a column in the high res flowlines
@@ -161,6 +134,10 @@ psql -d sheds_new -c "DROP TABLE gis.hrd_flowlines_featureid"
 
 		
 
+		
+		
+		
+		
 # ===========
 # For Testing
 # ===========
